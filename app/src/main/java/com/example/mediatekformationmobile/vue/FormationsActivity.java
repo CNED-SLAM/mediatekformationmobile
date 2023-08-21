@@ -1,8 +1,11 @@
 package com.example.mediatekformationmobile.vue;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -46,9 +49,10 @@ public class FormationsActivity extends AppCompatActivity {
         ArrayList<Formation> lesFormations = controle.getLesFormations();
         if(lesFormations != null){
             Collections.sort(lesFormations, Collections.<Formation>reverseOrder());
-            ListView listView = (ListView)findViewById(R.id.lstFormations);
+            RecyclerView lstFormations = (RecyclerView)findViewById(R.id.lstFormations);
             FormationListAdapter adapter = new FormationListAdapter(lesFormations,FormationsActivity.this);
-            listView.setAdapter(adapter);
+            lstFormations.setAdapter(adapter);
+            lstFormations.setLayoutManager(new LinearLayoutManager((FormationsActivity.this)));
         }
     }
 

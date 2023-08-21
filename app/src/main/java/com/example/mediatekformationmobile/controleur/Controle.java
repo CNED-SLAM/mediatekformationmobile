@@ -10,6 +10,7 @@ public class Controle {
     private static Controle instance = null ;
     private ArrayList<Formation> lesFormations = new ArrayList<>();
     private Formation formation = null;
+    private static AccesDistant accesDistant;
 
     /**
      * constructeur privé
@@ -25,7 +26,7 @@ public class Controle {
     public static final Controle getInstance(){
         if(Controle.instance == null){
             Controle.instance = new Controle();
-            AccesDistant accesDistant = new AccesDistant();
+            accesDistant = AccesDistant.getInstance();
             accesDistant.envoi("tous", null);
         }
         return Controle.instance;
@@ -41,21 +42,6 @@ public class Controle {
 
     public ArrayList<Formation> getLesFormations() {
         return lesFormations;
-    }
-
-    /**
-     * retourne les formations dont le titre contient le filtre
-     * @param filtre
-     * @return
-     */
-    public ArrayList<Formation> getLesFormationFiltre(String filtre){
-        ArrayList<Formation> lesFormationsFiltre = new ArrayList<>();
-        for(Formation uneFormation : lesFormations){
-            if(uneFormation.getTitle().toUpperCase().contains(filtre.toUpperCase())){
-                lesFormationsFiltre.add(uneFormation);
-            }
-        }
-        return lesFormationsFiltre;
     }
 
     public void setLesFormations(ArrayList<Formation> lesFormations) {

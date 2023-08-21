@@ -41,10 +41,11 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <ListView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lstFormations"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
         </LinearLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

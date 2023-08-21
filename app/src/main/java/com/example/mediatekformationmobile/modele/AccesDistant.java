@@ -17,13 +17,25 @@ import java.util.Date;
 public class AccesDistant implements AsyncResponse {
 
     private static final String SERVERADDR = "http://192.168.0.16/rest_mediatekformationmobile/";
+    private static AccesDistant instance;
     private Controle controle;
 
     /**
-     * constructeur
+     * constructeur oruvé
      */
-    public AccesDistant(){
+    private AccesDistant(){
         controle = Controle.getInstance();
+    }
+
+    /**
+     * Création d'une instance unique de la classe
+     * @return instance unique de la classe
+     */
+    public static AccesDistant getInstance(){
+        if(instance == null){
+            instance = new AccesDistant();
+        }
+        return instance;
     }
 
     /**
@@ -35,24 +47,28 @@ public class AccesDistant implements AsyncResponse {
         Log.d("serveur", "************" + output);
         try {
             JSONObject retour = new JSONObject(output);
+            String code = retour.getString("code");
             String message = retour.getString("message");
-            if (!message.equals("OK")) {
-                Log.d("erreur", "********* problème retour api rest :" + message);
-            } else {
-                JSONArray infos = retour.getJSONArray("result");
-                ArrayList<Formation> lesFormations = new ArrayList<>();
-                for (int k = 0; k < infos.length(); k++) {
-                    JSONObject info = new JSONObject(infos.get(k).toString());
-                    int id = Integer.parseInt(info.getString("id"));
-                    Date publishedAt = MesOutils.convertStringToDate(info.getString("published_at"),
-                            "yyyy-MM-dd hh:mm:ss");
-                    String title = info.getString("title");
-                    String description = info.getString("description");
-                    String videoId = info.getString("video_id");
-                    Formation formation = new Formation(id, publishedAt, title, description, videoId);
-                    lesFormations.add(formation);
+            String result = retour.getString("result");
+            if(!code.equals("200")){
+                Log.d("erreur", "************ retour serveur code="+code+" result="+result);
+            }else{
+                if(message.equals("GET")){
+                    JSONArray resultJson = new JSONArray(result);
+                    ArrayList<Formation> lesFormations = new ArrayList<Formation>();
+                    for(int k=0;k<resultJson.length();k++) {
+                        JSONObject info = new JSONObject(resultJson.get(k).toString());
+                        int id = Integer.parseInt(info.getString("id"));
+                        Date publishedAt = MesOutils.convertStringToDate(info.getString("published_at"),
+                                "yyyy-MM-dd hh:mm:ss");
+                        String title = info.getString("title");
+                        String description = info.getString("description");
+                        String videoId = info.getString("video_id");
+                        Formation formation = new Formation(id, publishedAt, title, description, videoId);
+                        lesFormations.add(formation);
+                    }
+                    controle.setLesFormations(lesFormations);
                 }
-                controle.setLesFormations(lesFormations);
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -74,7 +90,7 @@ public class AccesDistant implements AsyncResponse {
         if (requesMethod != null) {
             accesDonnees.setRequestMethod(requesMethod);
             accesDonnees.addParam("formation");
-            if (lesDonneesJSON != null) {
+            if(lesDonneesJSON != null && lesDonneesJSON.length() > 0) {
                 accesDonnees.addParam(lesDonneesJSON.toString());
             }
             accesDonnees.execute(SERVERADDR);
