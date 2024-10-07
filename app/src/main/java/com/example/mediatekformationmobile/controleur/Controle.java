@@ -27,7 +27,7 @@ public class Controle {
         if(Controle.instance == null){
             Controle.instance = new Controle();
             accesDistant = AccesDistant.getInstance();
-            accesDistant.envoi("tous", null);
+            accesDistant.envoi("tous", "formation", null);
         }
         return Controle.instance;
     }

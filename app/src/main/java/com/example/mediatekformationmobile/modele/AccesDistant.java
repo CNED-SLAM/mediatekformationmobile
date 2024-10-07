@@ -53,7 +53,7 @@ public class AccesDistant implements AsyncResponse {
             if(!code.equals("200")){
                 Log.d("erreur", "************ retour serveur code="+code+" result="+result);
             }else{
-                if(message.equals("GET")){
+                try{
                     JSONArray resultJson = new JSONArray(result);
                     ArrayList<Formation> lesFormations = new ArrayList<Formation>();
                     for(int k=0;k<resultJson.length();k++) {
@@ -68,7 +68,7 @@ public class AccesDistant implements AsyncResponse {
                         lesFormations.add(formation);
                     }
                     controle.setLesFormations(lesFormations);
-                }
+                }catch (JSONException ex){}
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -78,9 +78,10 @@ public class AccesDistant implements AsyncResponse {
     /**
      * envoi de données vers le serveur distant
      * @param operation
+     * @param table
      * @param lesDonneesJSON
      */
-    public void envoi(String operation, JSONObject lesDonneesJSON){
+    public void envoi(String operation, String table, JSONObject lesDonneesJSON){
         AccesREST accesDonnees = new AccesREST();
         accesDonnees.delegate = this;
         String requesMethod = null;
@@ -89,7 +90,7 @@ public class AccesDistant implements AsyncResponse {
         }
         if (requesMethod != null) {
             accesDonnees.setRequestMethod(requesMethod);
-            accesDonnees.addParam("formation");
+            accesDonnees.addParam(table);
             if(lesDonneesJSON != null && lesDonneesJSON.length() > 0) {
                 accesDonnees.addParam(lesDonneesJSON.toString());
             }

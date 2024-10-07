@@ -36,6 +36,7 @@
         <activity
             android:name=".vue.FormationsActivity"
             android:parentActivityName=".vue.MainActivity"
+            android:windowSoftInputMode="stateHidden"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
