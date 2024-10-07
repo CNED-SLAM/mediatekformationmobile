@@ -57,19 +57,19 @@ Explication des champs :<br>
 . video_id : id de la vidéo sur YouTube. Cet id correspond à la fin du chemin obtenu en cliquant sur le bouton "partager" d'une vidéo sur YouTube. Par exemple, l'id " Z4yTTXka958" a été récupéré dans le lien de partage "https://youtu.be/Z4yTTXka958"<br>
 . playlist_id : id de la playlist qui contient cette formation (non utilisé ici).
 ## Contenu de l'API REST
-L'API REST qui permet d'accéder à la base de données est composée de 5 fichiers :<br>
-. .htaccess : contient la route redéfinie pour récupérer les formations.<br>
-. mediatekformationmobile.php : fichier d'entrée dans l'API (récupère les variables en GET et appelle les méthodes de Controle, suivant le verbe http.<br>
-. Controle.php : sollicite AccessBDD pour exécuter les demandes et retourne l'information demandée en l'affichant au format JSON.<br>
-. AccessBDD.php : prépare les requêtes et demande à ConnexionPDO de les exécuter.<br>
- . ConnexionPDO.php : se connecte à la BDD et exécute les requêtes.<br>
-L'application n'utilise que le verbe http "GET" mais L'API permet de gérer les 4 verbes standards.
+L'API REST qui permet d'accéder à la base de données est construite à partir de la structure de rest_chocoltein accessible ici :<br>
+<a href="https://github.com/CNED-SLAM/rest_chocolatein">https://github.com/CNED-SLAM/rest_chocolatein</a><br>
+Pour comprendre son fonctionnement, il est conseillé de lire le Readme de ce dépôt.<br>
+La seule différence est au niveau du fichier sql qui, ici, contient le script de la BDD mediatekformation.
 ## Installation des applications
 ### API REST
 Pour tester l'application mediatekformationmobile local, il faut d'abord installer l'API. Voici le mode opératoire :<br>
-. Installer les outils nécessaires (WampServer ou équivalent, Netbeans ou équivalent, Postman pour les tests).<br>
-. Récupérer le zip du code de l'API (en racine du dépôt) et le dézipper dans le dossier www de wampserver (renommer le dossier en "rest_mediatekformationmobile", donc en enlevant "_master").<br>
+. Installer les outils nécessaires (WampServer ou équivalent, Netbeans ou équivalent pour intervenir dans le code, Postman pour les tests).<br>
+. Récupérer le zip du code de l'API (en racine du dépôt) et le dézipper dans le dossier www de wampserver (renommer le dossier en "rest_mediatekformationmobile").<br>
 . Récupérer le script mediatekformation.sql dans le zip précédent, avec phpMyAdmin, créer la BDD mediatekformation et, dans cette BDD, exécuter le script pour remplir la BDD.<br>
 . Ouvrir l'API dans Netbeans (ou autre IDE) pour pouvoir analyser le code et le faire évoluer suivant les besoins.
 ### Application Android
-Pour installer et tester l'application Android en local, consulter l'article "Préparer l'environnement de travail" dans le wiki.
+L'application a été faite avec la version "Android Studio Flamingo (2022.2.1).<br>
+Une fois la BDD et l'API REST installées, il reste une modification à faire dans l'application :<br>
+Dans AccesDistant.java du package moddele, se trouve la déclaration de la constante SERVERADDR qui contient l’adresse IP de l’api rest. Il faut remplacer l’adresse actuelle par celle qui correspond à votre machine. Pour les tests locaux, c’est votre ip local commençant normalement par 192.168.0 que vous pouvez trouver en tapant la commande ipconfig dans une fenêtre de commandes. Lorsque l’api sera déployée sur Internet, il faudra mettre l’adresse d’hébergement.<br>
+Pour finir de configurer Android Studio pour les tests en local, consulter l'article "Préparer l'environnement de travail" dans le wiki.
